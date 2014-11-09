@@ -6,7 +6,7 @@ BUILD_DIR=$1
 cat <<EOF
 ---
 config_vars:
-  PATH: /app/.jdk/bin:/usr/local/bin:/usr/bin:/bin
+  PATH: /app/.jdk/bin:/usr/local/bin:/usr/bin:/bin:$BUILD_DIR/.vertx/bin
   JAVA_OPTS: -Xmx384m -Xss512k -XX:+UseCompressedOops
 addons:
   heroku-postgresql:hobby-dev

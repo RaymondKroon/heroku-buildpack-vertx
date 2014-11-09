@@ -114,10 +114,4 @@ fi
 
 cd $BUILD_DIR
 
-export VERTX_HOME="$BUILD_DIR/.vertx"
-
-PROFILE_PATH="$BUILD_DIR/.profile.d/vertx.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="$VERTX_HOME/bin:/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
-
 logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_end $LOGGER_FLAGS"

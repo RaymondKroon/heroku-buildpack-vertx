@@ -92,9 +92,32 @@ if [ "true" == $KEEP_M2_CACHE ]; then
   done
 fi
 
-PROFILE_PATH="$BUILD_DIR/.profile.d/java.sh"
+cd $BUILD_DIR
+
+# install VERTX
+if [ -d "$CACHE_DIR/.vertx" ]; then
+  echo -n "-----> copying vertx to app"
+  cp -r "$CACHE_DIR/.vertx" $BUILD_DIR
+  echo "-----> done"
+fi
+
+VERTX_URL="http://dl.bintray.com/vertx/downloads/vert.x-2.1.4.tar.gz"
+
+if [ ! -d "$BUILD_DIR/.vertx" ]; then
+  echo -n "-----> Installing Vert.x build (to .vertx)....."
+  curl --max-time 320 --location $VERTX_URL | tar xz
+  mv vert* .vertx
+  rm '.vertx/bin/vertx.bat'
+  cp -r .vertx $CACHE_DIR/.vertx
+  echo " done"
+fi
+
+cd $BUILD_DIR
+
+export VERTX_HOME="$BUILD_DIR/.vertx"
+
+PROFILE_PATH="$BUILD_DIR/.profile.d/vertx.sh"
 mkdir -p $(dirname $PROFILE_PATH)
-echo 'export PATH="/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
-echo 'export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Djava.rmi.server.useCodebaseOnly=true"' >> $PROFILE_PATH
+echo 'export PATH="$VERTX_HOME/bin:/app/.jdk/bin:$PATH"' >> $PROFILE_PATH
 
 logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_end $LOGGER_FLAGS"
